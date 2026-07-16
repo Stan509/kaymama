@@ -1,0 +1,49 @@
+<tr class="group hover:bg-[#0f2b46]/2 transition">
+    <td class="py-4 px-6 font-bold text-navy">
+        {{ res.first_name }} {{ res.last_name }}
+        <span class="block text-[10px] text-navy/40 font-normal mt-0.5">{{ res.email }} | {{ res.phone }}</span>
+    </td>
+    <td class="py-4 px-6 font-semibold text-navy/70">
+        {{ res.date|date:"d/m/Y" }}
+        <span class="block text-[10px] font-normal text-navy/40 mt-0.5">à {{ res.time_slot|time:"H:i" }}</span>
+    </td>
+    <td class="py-4 px-6 text-center font-bold text-navy">
+        {{ res.guest_count }}
+    </td>
+    <td class="py-4 px-6 text-center text-xs text-navy/60">
+        {{ res.get_occasion_display }}
+    </td>
+    <td class="py-4 px-6 text-xs text-navy/60 max-w-xs truncate">
+        {{ res.notes|default:"-" }}
+    </td>
+    <td class="py-4 px-6 text-center">
+        <span class="font-bold text-xs uppercase px-2.5 py-1 rounded-full text-cream 
+            {% if res.status == 'APPROVED' %} bg-green 
+            {% elif res.status == 'REJECTED' %} bg-red-600 
+            {% else %} bg-orange {% endif %}">
+            {{ res.get_status_display }}
+        </span>
+    </td>
+    <td class="py-4 px-6 text-right">
+        {% if res.status == 'PENDING' %}
+        <div class="flex gap-2 justify-end">
+            <!-- Confirm button -->
+            <button hx-post="{% url 'dashboard:update_reservation' res.id 'APPROVED' %}"
+                    hx-target="closest tr"
+                    hx-swap="outerHTML"
+                    class="bg-green text-cream px-3 py-1 rounded-xl text-xs font-semibold hover:opacity-90 transition focus:outline-none">
+                Confirmer
+            </button>
+            <!-- Decline button -->
+            <button hx-post="{% url 'dashboard:update_reservation' res.id 'REJECTED' %}"
+                    hx-target="closest tr"
+                    hx-swap="outerHTML"
+                    class="bg-red-600 text-cream px-3 py-1 rounded-xl text-xs font-semibold hover:opacity-90 transition focus:outline-none">
+                Refuser
+            </button>
+        </div>
+        {% else %}
+        <span class="text-xs text-navy/30 italic">Traitée</span>
+        {% endif %}
+    </td>
+</tr>

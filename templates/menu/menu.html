@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block seo_title %}Notre Carte & Menu - Kay Mama Cuisine Créole{% endblock %}
+
+{% block content %}
+<section class="py-12 bg-cover bg-center text-center relative" style="background-image: linear-gradient(rgba(15, 43, 70, 0.8), rgba(15, 43, 70, 0.85)), url('https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=2000&auto=format&fit=crop');">
+    <div class="max-w-4xl mx-auto py-10 px-6" data-aos="fade-up">
+        <span class="text-gold font-script text-2xl">Découvrez nos délices</span>
+        <h1 class="text-cream text-4xl md:text-6xl font-bold font-serif mt-2">Notre Carte</h1>
+        <p class="text-cream/70 text-sm max-w-xl mx-auto mt-4 leading-relaxed">Chaque plat est fait maison à partir d'ingrédients locaux frais de la Guyane Française.</p>
+    </div>
+    <!-- Wave separator -->
+    <div class="absolute bottom-0 inset-x-0 h-8 bg-cream" style="clip-path: ellipse(60% 100% at 50% 100%);"></div>
+</section>
+
+<!-- Menu Grid & Filters -->
+<section class="max-w-7xl mx-auto py-16 px-6">
+    <div class="flex flex-col lg:flex-row gap-12">
+        <!-- Sidebar filters -->
+        <aside class="w-full lg:w-64 flex-shrink-0 flex flex-col gap-8" data-aos="fade-right">
+            <!-- Search bar -->
+            <div class="card-luxury p-6">
+                <h4 class="text-sm font-semibold tracking-wider text-navy uppercase mb-4">Rechercher</h4>
+                <div class="relative">
+                    <input type="text" name="q" placeholder="Ex: Poulet colombo..." 
+                           hx-get="{% url 'menu:items_htmx' %}" 
+                           hx-trigger="keyup changed delay:500ms" 
+                           hx-target="#menu-grid" 
+                           class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-xl px-4 py-2.5 text-sm text-[#0F2B46] focus:outline-none focus:border-[#B87333]">
+                </div>
+            </div>
+
+            <!-- Categories Tabs -->
+            <div class="card-luxury p-6">
+                <h4 class="text-sm font-semibold tracking-wider text-navy uppercase mb-4">Catégories</h4>
+                <div class="flex flex-wrap lg:flex-col gap-2">
+                    <button hx-get="{% url 'menu:items_htmx' %}" hx-target="#menu-grid" hx-push-url="true"
+                            class="text-left w-full px-4 py-2 rounded-xl text-sm font-medium hover:bg-navy/5 transition duration-300 {% if not selected_category_slug %}bg-navy text-cream hover:bg-navy{% endif %}">
+                        Tout voir
+                    </button>
+                    {% for cat in categories %}
+                        <button hx-get="{% url 'menu:items_htmx' %}?category={{ cat.slug }}" hx-target="#menu-grid" hx-push-url="true"
+                                class="text-left w-full px-4 py-2 rounded-xl text-sm font-medium hover:bg-navy/5 transition duration-300 {% if selected_category_slug == cat.slug %}bg-navy text-cream hover:bg-navy{% endif %}">
+                            {{ cat.name }}
+                        </button>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Delivery Note -->
+            <div class="bg-navy/5 border border-navy/10 rounded-3xl p-6 text-xs leading-relaxed text-navy/70">
+                <span class="font-bold text-copper block mb-1">ℹ️ Livraison Cayenne</span>
+                Livraison à domicile disponible uniquement sur Cayenne à partir de 5 plats commandés (voir flyer).
+            </div>
+        </aside>
+
+        <!-- Menu grid results -->
+        <div class="flex-grow">
+            <!-- HTMX target container -->
+            <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8" data-aos="fade-up">
+                {% include 'menu/partials/dish_grid.html' %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

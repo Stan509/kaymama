@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block seo_title %}Salon de Beauté | Kay Mama - Coiffure, Onglerie & Soins Esthétiques{% endblock %}
+{% block seo_description %}Découvrez l'espace Beauté de Kay Mama. Profitez de nos prestations de coiffure, tressage, manucure et soins esthétiques haut de gamme à Cayenne.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative min-h-[50vh] flex items-center justify-center py-20 px-6 bg-cover bg-center overflow-hidden" style="background-image: linear-gradient(rgba(15, 43, 70, 0.7), rgba(15, 43, 70, 0.8)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=2000&auto=format&fit=crop');">
+    <div class="absolute bottom-0 inset-x-0 h-12 bg-cream" style="clip-path: ellipse(60% 100% at 50% 100%);"></div>
+    <div class="max-w-4xl mx-auto text-center z-10 flex flex-col items-center gap-6" data-aos="fade-up">
+        <span class="text-gold text-2xl md:text-3xl font-script tracking-widest block transform -rotate-2">Bienvenue à l'Espace Beauté</span>
+        <h1 class="text-cream text-5xl md:text-6xl font-bold tracking-tight leading-tight font-serif">
+            KAY MAMA SALON DE BEAUTÉ
+        </h1>
+        <p class="text-cream/80 text-lg md:text-xl max-w-2xl font-light leading-relaxed">
+            Un havre de paix dédié à votre bien-être et à votre beauté. Découvrez nos prestations sur-mesure réalisées par des expertes passionnées.
+        </p>
+        <a href="#booking-form" class="btn-premium-copper text-center text-base font-semibold px-8 py-4 shadow-xl hover:scale-105 transition transform mt-4">
+            Prendre un Rendez-vous
+        </a>
+    </div>
+</section>
+
+<!-- Services & Pricing Grid -->
+<section class="py-20 px-6 max-w-7xl mx-auto">
+    <div class="text-center mb-16" data-aos="fade-up">
+        <span class="text-copper font-script text-2xl">Nos Prestations</span>
+        <h2 class="text-4xl font-bold font-serif text-navy mt-2">Menu de Beauté</h2>
+        <div class="w-24 h-1 bg-gold mx-auto mt-4 rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Card 1: Coiffure -->
+        <div class="card-luxury p-8 flex flex-col items-center text-center gap-5" data-aos="fade-up" data-aos-delay="100">
+            <div class="w-20 h-20 rounded-full bg-navy/5 flex items-center justify-center text-4xl text-navy">💇‍♀️</div>
+            <h3 class="text-2xl font-bold font-serif text-navy">Coiffure & Tressage</h3>
+            <p class="text-sm text-navy/70 leading-relaxed min-h-[80px]">
+                Sublimez vos cheveux avec nos tresses africaines, locks, tissages, coupes modernes et soins capillaires profonds.
+            </p>
+            <div class="border-t border-navy/10 w-full pt-4 mt-auto">
+                <span class="text-xs text-navy/50 uppercase block tracking-wider">Tarifs</span>
+                <span class="text-2xl font-serif font-bold text-copper">à partir de 30 €</span>
+            </div>
+        </div>
+
+        <!-- Card 2: Onglerie -->
+        <div class="card-luxury p-8 flex flex-col items-center text-center gap-5" data-aos="fade-up" data-aos-delay="200">
+            <div class="w-20 h-20 rounded-full bg-navy/5 flex items-center justify-center text-4xl text-navy">💅</div>
+            <h3 class="text-2xl font-bold font-serif text-navy">Onglerie</h3>
+            <p class="text-sm text-navy/70 leading-relaxed min-h-[80px]">
+                Des mains et des pieds impeccables : pose de faux ongles (gel/résine), vernis semi-permanent, nail art créatif et manucure spa.
+            </p>
+            <div class="border-t border-navy/10 w-full pt-4 mt-auto">
+                <span class="text-xs text-navy/50 uppercase block tracking-wider">Tarifs</span>
+                <span class="text-2xl font-serif font-bold text-copper">à partir de 25 €</span>
+            </div>
+        </div>
+
+        <!-- Card 3: Soins Esthétiques -->
+        <div class="card-luxury p-8 flex flex-col items-center text-center gap-5" data-aos="fade-up" data-aos-delay="300">
+            <div class="w-20 h-20 rounded-full bg-navy/5 flex items-center justify-center text-4xl text-navy">✨</div>
+            <h3 class="text-2xl font-bold font-serif text-navy">Soins Esthétiques</h3>
+            <p class="text-sm text-navy/70 leading-relaxed min-h-[80px]">
+                Éclat et relaxation : soins du visage hydratants ou purifiants, épilation sourcils/visage et rehaussement de cils.
+            </p>
+            <div class="border-t border-navy/10 w-full pt-4 mt-auto">
+                <span class="text-xs text-navy/50 uppercase block tracking-wider">Tarifs</span>
+                <span class="text-2xl font-serif font-bold text-copper">à partir de 20 €</span>
+            </div>
+        </div>
+
+        <!-- Card 4: Maquillage -->
+        <div class="card-luxury p-8 flex flex-col items-center text-center gap-5" data-aos="fade-up" data-aos-delay="400">
+            <div class="w-20 h-20 rounded-full bg-navy/5 flex items-center justify-center text-4xl text-navy">💄</div>
+            <h3 class="text-2xl font-bold font-serif text-navy">Maquillage</h3>
+            <p class="text-sm text-navy/70 leading-relaxed min-h-[80px]">
+                Un maquillage professionnel et sur-mesure pour vos mariages, fêtes, séances photos ou événements d'exception.
+            </p>
+            <div class="border-t border-navy/10 w-full pt-4 mt-auto">
+                <span class="text-xs text-navy/50 uppercase block tracking-wider">Tarifs</span>
+                <span class="text-2xl font-serif font-bold text-copper">à partir de 40 €</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Beautiful Promotion & Visual Section -->
+<section class="py-20 px-6 bg-navy text-cream relative">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <!-- Left Side Image -->
+        <div class="relative rounded-3xl overflow-hidden shadow-2xl h-[450px]" data-aos="fade-right">
+            <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=1500&auto=format&fit=crop" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-navy/60 to-transparent"></div>
+        </div>
+        
+        <div class="flex flex-col gap-6" data-aos="fade-left">
+            <span class="text-gold font-script text-2xl">L'Expérience Kay Mama</span>
+            <h2 class="text-4xl font-bold font-serif text-cream leading-tight">
+                Pourquoi choisir notre Salon ?
+            </h2>
+            <p class="text-cream/80 leading-relaxed">
+                Parce que vous méritez un moment d'exception ! Notre salon utilise des produits de qualité premium, adaptés à tous types de peaux et de cheveux. Dans un cadre chaleureux et intime, venez vous détendre et vous faire chouchouter par nos esthéticiennes diplômées et passionnées.
+            </p>
+            <!-- Benefit points -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                <div class="flex items-center gap-3">
+                    <span class="text-gold text-xl">✓</span>
+                    <span class="text-sm text-cream/90 font-medium">Esthéticiennes diplômées</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-gold text-xl">✓</span>
+                    <span class="text-sm text-cream/90 font-medium">Produits haut de gamme</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-gold text-xl">✓</span>
+                    <span class="text-sm text-cream/90 font-medium">Conseils personnalisés</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-gold text-xl">✓</span>
+                    <span class="text-sm text-cream/90 font-medium">Ambiance relaxante & chaleureuse</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Appointment Booking Form -->
+<section id="booking-form" class="py-20 px-6 max-w-4xl mx-auto scroll-mt-24">
+    <div class="card-luxury p-8 md:p-12 shadow-2xl">
+        <div class="text-center mb-10">
+            <span class="text-copper font-script text-2xl">Planifiez votre moment de bien-être</span>
+            <h2 class="text-4xl font-bold font-serif text-navy mt-2">Réserver un Rendez-vous</h2>
+            <div class="w-16 h-0.5 bg-gold mx-auto mt-4"></div>
+        </div>
+
+        <form method="POST" class="flex flex-col gap-6">
+            {% csrf_token %}
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Prénom -->
+                <div class="flex flex-col gap-2">
+                    <label for="first_name" class="text-sm font-semibold text-navy">Prénom <span class="text-red-500">*</span></label>
+                    <input type="text" id="first_name" name="first_name" required
+                           class="w-full bg-cream border border-navy/15 rounded-xl px-4 py-3 text-navy focus:outline-none focus:border-copper transition"
+                           placeholder="Votre prénom">
+                </div>
+
+                <!-- Nom -->
+                <div class="flex flex-col gap-2">
+                    <label for="last_name" class="text-sm font-semibold text-navy">Nom de famille <span class="text-red-500">*</span></label>
+                    <input type="text" id="last_name" name="last_name" required
+                           class="w-full bg-cream border border-navy/15 rounded-xl px-4 py-3 text-navy focus:outline-none focus:border-copper transition"
+                           placeholder="Votre nom">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- E-mail -->
+                <div class="flex flex-col gap-2">
+                    <label for="email" class="text-sm font-semibold text-navy">Adresse e-mail <span class="text-red-500">*</span></label>
+                    <input type="email" id="email" name="email" required
+                           class="w-full bg-cream border border-navy/15 rounded-xl px-4 py-3 text-navy focus:outline-none focus:border-copper transition"
+                           placeholder="Ex: marie@gmail.com">
+                </div>
+
+                <!-- Téléphone -->
+                <div class="flex flex-col gap-2">
+                    <label for="phone" class="text-sm font-semibold text-navy">Numéro de téléphone <span class="text-red-500">*</span></label>
+                    <input type="tel" id="phone" name="phone" required
+                           class="w-full bg-cream border border-navy/15 rounded-xl px-4 py-3 text-navy focus:outline-none focus:border-copper transition"
+                           placeholder="Ex: 0694 12 34 56">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Date -->
+                <div class="flex flex-col gap-2">
+                    <label for="date" class="text-sm font-semibold text-navy">Date <span class="text-red-500">*</span></label>
+                    <input type="date" id="date" name="date" required
+                           class="w-full bg-cream border border-navy/15 rounded-xl px-4 py-3 text-navy focus:outline-none focus:border-copper transition"
+                           min="{{ today|date:'Y-m-d' }}">
+                </div>
+
+                <!-- Heure -->
+                <div class="flex flex-col gap-2">
+                    <label for="time_slot" class="text-sm font-semibold text-navy">Créneau horaire <span class="text-red-500">*</span></label>
+                    <select id="time_slot" name="time_slot" required
+                            class="w-full bg-cream border border-navy/15 rounded-xl px-4 py-3 text-navy focus:outline-none focus:border-copper transition">
+                        <option value="09:00">09:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                        <option value="17:00">17:00</option>
+                        <option value="18:00">18:00</option>
+                    </select>
+                </div>
+
+                <!-- Prestation -->
+                <div class="flex flex-col gap-2">
+                    <label for="service" class="text-sm font-semibold text-navy">Prestation <span class="text-red-500">*</span></label>
+                    <select id="service" name="service" required
+                            class="w-full bg-cream border border-navy/15 rounded-xl px-4 py-3 text-navy focus:outline-none focus:border-copper transition">
+                        <option value="Coiffure & Tressage">Coiffure & Tressage</option>
+                        <option value="Onglerie / Manucure">Onglerie / Manucure</option>
+                        <option value="Soins Esthétiques">Soins Esthétiques (visage/cils)</option>
+                        <option value="Maquillage">Maquillage Professionnel</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="flex flex-col gap-2">
+                <label for="notes" class="text-sm font-semibold text-navy">Précisions ou demandes particulières</label>
+                <textarea id="notes" name="notes" rows="4"
+                          class="w-full bg-cream border border-navy/15 rounded-xl px-4 py-3 text-navy focus:outline-none focus:border-copper transition"
+                          placeholder="Indiquez par exemple la longueur de tresse souhaitée, la couleur de vernis ou vos allergies..."></textarea>
+            </div>
+
+            <!-- Bouton validation -->
+            <button type="submit" class="btn-premium-copper w-full py-4 text-base font-semibold shadow-xl hover:scale-[1.02] active:scale-[0.98] transition">
+                Confirmer ma demande de rendez-vous
+            </button>
+        </form>
+    </div>
+</section>
+
+<!-- Script for setting default date to tomorrow -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const dateInput = document.getElementById("date");
+        if (dateInput) {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowStr = tomorrow.toISOString().split("T")[0];
+            dateInput.value = tomorrowStr;
+            dateInput.min = tomorrowStr;
+        }
+    });
+</script>
+{% endblock %}

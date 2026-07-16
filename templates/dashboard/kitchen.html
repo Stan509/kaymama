@@ -1,0 +1,32 @@
+{% extends 'dashboard/home.html' %}
+
+{% block dashboard_content %}
+<section class="mb-6 flex justify-between items-center">
+    <div>
+        <h3 class="text-xl font-bold font-serif text-navy">Écran Cuisine (Live)</h3>
+        <p class="text-xs text-navy/60 mt-1">Les commandes s'affichent et s'actualisent en temps réel. Mettez à jour le statut au fur et à mesure.</p>
+    </div>
+    <span class="text-xs font-semibold bg-green/10 text-green px-3 py-1.5 rounded-full animate-pulse">🟢 Actualisation automatique active</span>
+</section>
+
+<!-- Active Orders Board -->
+<!-- We poll every 10 seconds to fetch new orders, targeting the orders container -->
+<div id="orders-container" 
+     hx-get="{% url 'dashboard:kitchen' %}" 
+     hx-trigger="every 10s" 
+     hx-select="#orders-list-grid" 
+     hx-target="#orders-list-grid" 
+     hx-swap="outerHTML"
+     class="mt-6">
+     
+    <div id="orders-list-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        {% for order in orders %}
+            {% include 'dashboard/partials/kitchen_card.html' %}
+        {% empty %}
+        <div class="col-span-full card-luxury p-12 text-center text-navy/40 font-serif italic">
+            Aucune commande active en préparation. Tout est à jour !
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

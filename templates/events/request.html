@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block seo_title %}Demande de Devis Événementiel - Kay Mama{% endblock %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto py-16 px-6">
+    <div class="text-center mb-12" data-aos="fade-up">
+        <span class="text-copper font-script text-2xl">Une réception d'exception</span>
+        <h1 class="text-3xl md:text-5xl font-bold font-serif text-navy mt-2">Traiteur & Événementiel</h1>
+        <div class="w-24 h-1 bg-gold mx-auto mt-4 rounded-full"></div>
+        <p class="text-navy/60 text-sm mt-4 max-w-lg mx-auto">Mariage, anniversaire, repas d'affaires ou cocktail privé : laissez Kay Mama s'occuper de régaler vos convives en Guyane Française.</p>
+    </div>
+
+    <form method="POST" action="{% url 'events:request_quote' %}" class="card-luxury p-8 md:p-12 flex flex-col gap-8 mt-8" data-aos="fade-up">
+        {% csrf_token %}
+        
+        <!-- Contact details -->
+        <div>
+            <h3 class="text-lg font-bold font-serif text-navy border-b border-navy/5 pb-3 mb-6">1. Coordonnées de l'organisateur</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-navy/60 uppercase">Nom complet</label>
+                    <input type="text" name="name" required value="{{ user.first_name }} {{ user.last_name }}" class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-xl px-4 py-3 text-[#0F2B46] focus:outline-none focus:border-[#B87333]">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-navy/60 uppercase">Adresse E-mail</label>
+                    <input type="email" name="email" required value="{{ user.email }}" class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-xl px-4 py-3 text-[#0F2B46] focus:outline-none focus:border-[#B87333]">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-navy/60 uppercase">Téléphone</label>
+                    <input type="tel" name="phone" required value="{{ user.phone_number }}" placeholder="Ex: 0694 00 00 00" class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-xl px-4 py-3 text-[#0F2B46] focus:outline-none focus:border-[#B87333]">
+                </div>
+            </div>
+        </div>
+
+        <!-- Event info -->
+        <div>
+            <h3 class="text-lg font-bold font-serif text-navy border-b border-navy/5 pb-3 mb-6">2. Détails du projet</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Type of event -->
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-navy/60 uppercase">Type de prestation</label>
+                    <select name="event_type" required class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-xl px-4 py-3 text-[#0F2B46] focus:outline-none focus:border-[#B87333]">
+                        <option value="">Sélectionnez une option</option>
+                        {% for val, label in event_choices %}
+                            <option value="{{ val }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Date -->
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-navy/60 uppercase">Date prévue</label>
+                    <input type="date" name="event_date" required class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-xl px-4 py-3 text-[#0F2B46] focus:outline-none focus:border-[#B87333]">
+                </div>
+
+                <!-- Guests count -->
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-navy/60 uppercase">Nombre d'invités estimé</label>
+                    <input type="number" name="guest_count" required min="10" value="20" class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-xl px-4 py-3 text-[#0F2B46] focus:outline-none focus:border-[#B87333]">
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="flex flex-col gap-1 mt-6">
+                <label class="text-xs font-semibold text-navy/60 uppercase font-bold">Décrivez votre projet (besoin de service, type de buffet, plats favoris...)</label>
+                <textarea name="notes" required rows="5" placeholder="Décrivez ici vos attentes pour votre devis sur-mesure..." class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-xl px-4 py-3 text-[#0F2B46] focus:outline-none focus:border-[#B87333]"></textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-premium-copper text-center py-4 font-semibold shadow-xl block hover:scale-102 transition transform w-full mt-4">
+            Envoyer ma demande de Devis
+        </button>
+    </form>
+</section>
+{% endblock %}

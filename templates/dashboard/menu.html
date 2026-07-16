@@ -1,0 +1,42 @@
+{% extends 'dashboard/home.html' %}
+
+{% block dashboard_content %}
+<section class="card-luxury p-8">
+    <div class="border-b border-navy/5 pb-6 mb-8 flex justify-between items-center">
+        <div>
+            <h3 class="text-xl font-bold font-serif text-navy">Gestion de la Carte (Menu)</h3>
+            <p class="text-xs text-navy/60 mt-1">Modifiez rapidement les stocks, les prix et la disponibilité des plats.</p>
+        </div>
+        <a href="/admin/menu/dish/add/" class="btn-premium-navy text-xs font-semibold py-2 px-4">
+            + Ajouter un Plat
+        </a>
+    </div>
+
+    <!-- Dishes Table -->
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="border-b border-navy/10 text-xs font-semibold uppercase tracking-wider text-navy/60">
+                    <th class="py-4 px-6">Plat</th>
+                    <th class="py-4 px-6">Catégorie</th>
+                    <th class="py-4 px-6 text-center">Prix</th>
+                    <th class="py-4 px-6 text-center">Stock</th>
+                    <th class="py-4 px-6 text-center">Disponibilité</th>
+                    <th class="py-4 px-6 text-right">Actions rapides</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-navy/5 text-sm">
+                {% for dish in dishes %}
+                    {% include 'dashboard/partials/menu_row.html' %}
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="py-12 text-center text-navy/40 font-serif italic">
+                        Aucun plat dans la base.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

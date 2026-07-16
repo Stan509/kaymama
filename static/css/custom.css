@@ -1,0 +1,146 @@
+/* Custom premium styling for Kay Mama Cuisine Créole */
+
+/* Import premium fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Caveat:wght@600;700&display=swap');
+
+:root {
+  --color-cream: #F7F3EC;
+  --color-navy: #0F2B46;
+  --color-copper: #B87333;
+  --color-gold: #D9A441;
+  --color-brown: #6B4325;
+  --color-orange: #D67A2C;
+  --color-green: #567C4D;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--color-cream);
+  color: var(--color-navy);
+  overflow-x: hidden;
+  /* Add subtle background paper texture */
+  background-image: radial-gradient(var(--color-navy) 0.5px, transparent 0.5px), radial-gradient(var(--color-navy) 0.5px, var(--color-cream) 0.5px);
+  background-size: 40px 40px;
+  background-position: 0 0, 20px 20px;
+  background-color: #f6f1e7;
+  opacity: 0.98;
+}
+
+h1, h2, h3, h4, h5, h6, .font-serif {
+  font-family: 'Playfair Display', serif;
+}
+
+.font-script {
+  font-family: 'Caveat', cursive;
+}
+
+/* Copper & gold gradient borders */
+.border-gradient-luxury {
+  border-image: linear-gradient(to right, var(--color-copper), var(--color-gold), var(--color-brown)) 1;
+}
+
+/* Rounded luxury cards */
+.card-luxury {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(15, 43, 70, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 10px 30px -10px rgba(15, 43, 70, 0.05);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-luxury:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px -15px rgba(15, 43, 70, 0.1);
+  border-color: rgba(184, 115, 51, 0.3);
+}
+
+/* Premium Buttons */
+.btn-premium-navy {
+  background-color: var(--color-navy);
+  color: var(--color-cream);
+  border-radius: 9999px;
+  padding: 0.75rem 2rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.btn-premium-navy:hover {
+  background-color: transparent;
+  color: var(--color-navy);
+  border-color: var(--color-navy);
+}
+
+.btn-premium-copper {
+  background-color: var(--color-copper);
+  color: var(--color-cream);
+  border-radius: 9999px;
+  padding: 0.75rem 2rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.btn-premium-copper:hover {
+  background-color: transparent;
+  color: var(--color-copper);
+  border-color: var(--color-copper);
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Loading animations */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background-color: var(--color-navy);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Glassmorphism panel */
+.glass-panel {
+  background: rgba(247, 243, 236, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Dark mode overrides for dashboard */
+.dark-mode {
+  --color-cream: #09121f;
+  background-color: #09121f;
+  color: #f7f3ec;
+  background-image: radial-gradient(rgba(247, 243, 236, 0.05) 0.5px, transparent 0.5px), radial-gradient(rgba(247, 243, 236, 0.05) 0.5px, #09121f 0.5px);
+}
+
+.dark-mode .card-luxury {
+  background-color: rgba(15, 43, 70, 0.5);
+  border-color: rgba(247, 243, 236, 0.05);
+}
+.dark-mode .glass-panel {
+  background: rgba(15, 43, 70, 0.9);
+}
+.dark-mode h1, .dark-mode h2, .dark-mode h3, .dark-mode h4, .dark-mode p {
+  color: #F7F3EC;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-cream);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-copper);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-navy);
+}

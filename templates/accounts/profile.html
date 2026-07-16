@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block seo_title %}Mon Compte - Kay Mama Cuisine Créole{% endblock %}
+
+{% block content %}
+<section class="max-w-7xl mx-auto py-16 px-6">
+    <h1 class="text-3xl md:text-5xl font-bold font-serif text-navy mb-8 text-center md:text-left">Mon Compte</h1>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 mt-8">
+        <!-- Sidebar: Profile update -->
+        <aside class="flex flex-col gap-6" data-aos="fade-right">
+            <div class="card-luxury p-8 flex flex-col gap-6">
+                <div class="flex items-center gap-4 border-b border-navy/5 pb-6">
+                    <div class="w-16 h-16 rounded-full bg-navy/10 text-navy flex items-center justify-center font-bold text-2xl">
+                        {{ user.username|slice:":1"|upper }}
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold font-serif text-navy">{{ user.first_name }} {{ user.last_name }}</h3>
+                        <span class="text-xs text-navy/50">{{ user.get_role_display }}</span>
+                    </div>
+                </div>
+
+                <form method="POST" action="{% url 'accounts:profile' %}" class="flex flex-col gap-4 text-xs">
+                    {% csrf_token %}
+                    <div class="flex flex-col gap-1">
+                        <label class="font-semibold text-navy/60 uppercase">Prénom</label>
+                        <input type="text" name="first_name" value="{{ user.first_name }}" class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-xl px-4 py-2.5 text-[#0F2B46] focus:outline-none focus:border-[#B87333]">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="font-semibold text-navy/60 uppercase">Nom</label>
+                        <input type="text" name="last_name" value="{{ user.last_name }}" class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-xl px-4 py-2.5 text-[#0F2B46] focus:outline-none focus:border-[#B87333]">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="font-semibold text-navy/60 uppercase">Téléphone</label>
+                        <input type="tel" name="phone_number" value="{{ user.phone_number }}" class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-xl px-4 py-2.5 text-[#0F2B46] focus:outline-none focus:border-[#B87333]">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="font-semibold text-navy/60 uppercase">Adresse par défaut</label>
+                        <textarea name="address" rows="2" class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-xl px-4 py-2.5 text-[#0F2B46] focus:outline-none focus:border-[#B87333]">{{ user.address }}</textarea>
+                    </div>
+
+                    <button type="submit" class="btn-premium-navy text-center py-2.5 font-semibold mt-2 hover:scale-102 transition transform w-full">
+                        Mettre à jour
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Main section: Order & reservation histories -->
+        <div class="lg:col-span-2 flex flex-col gap-8" data-aos="fade-up">
+            <!-- Order History -->
+            <div class="card-luxury p-8">
+                <h3 class="text-xl font-bold font-serif text-navy border-b border-navy/5 pb-4 mb-6">Historique des commandes</h3>
+                
+                {% if orders %}
+                <div class="flex flex-col gap-4">
+                    {% for order in orders %}
+                    <div class="border border-navy/10 rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <span class="text-xs text-navy/50 font-semibold uppercase">Commande {{ order.order_number }}</span>
+                            <h4 class="font-bold text-navy text-sm mt-1">{{ order.created_at|date:"d M Y à H:i" }}</h4>
+                            <span class="text-xs text-navy/60 mt-1 block">Méthode : {{ order.get_delivery_method_display }}</span>
+                        </div>
+                        <div class="flex items-center gap-6 w-full sm:w-auto justify-between sm:justify-start">
+                            <div>
+                                <span class="text-xs text-navy/50 font-semibold block text-right">Montant</span>
+                                <span class="font-bold text-navy">{{ order.total_price }} €</span>
+                            </div>
+                            <div>
+                                <span class="text-xs text-navy/50 font-semibold block text-right">Statut</span>
+                                <span class="font-bold text-xs uppercase px-2.5 py-1 rounded-full text-cream {% if order.status == 'COMPLETED' %} bg-green {% else %} bg-copper {% endif %}">
+                                    {{ order.get_status_display }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-xs text-navy/50 italic py-4">Vous n'avez pas encore passé de commande.</p>
+                {% endif %}
+            </div>
+
+            <!-- Reservation History -->
+            <div class="card-luxury p-8">
+                <h3 class="text-xl font-bold font-serif text-navy border-b border-navy/5 pb-4 mb-6">Vos réservations</h3>
+                
+                {% if reservations %}
+                <div class="flex flex-col gap-4">
+                    {% for res in reservations %}
+                    <div class="border border-navy/10 rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <span class="text-xs text-navy/50 font-semibold uppercase">Table pour {{ res.guest_count }} pers.</span>
+                            <h4 class="font-bold text-navy text-sm mt-1">{{ res.date|date:"d F Y" }} à {{ res.time_slot|time:"H:i" }}</h4>
+                            <span class="text-xs text-navy/60 mt-1 block">Occasion : {{ res.get_occasion_display }}</span>
+                        </div>
+                        <div class="flex items-center gap-6 w-full sm:w-auto justify-between sm:justify-start">
+                            <div>
+                                <span class="text-xs text-navy/50 font-semibold block text-right">Statut</span>
+                                <span class="font-bold text-xs uppercase px-2.5 py-1 rounded-full text-cream {% if res.status == 'APPROVED' %} bg-green {% elif res.status == 'REJECTED' %} bg-red-600 {% else %} bg-orange {% endif %}">
+                                    {{ res.get_status_display }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-xs text-navy/50 italic py-4">Aucune demande de réservation trouvée.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

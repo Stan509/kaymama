@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block seo_title %}Notre Histoire - À propos de Kay Mama{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<section class="py-16 bg-navy text-cream relative">
+    <div class="max-w-4xl mx-auto text-center px-6" data-aos="fade-up">
+        <span class="text-gold font-script text-2xl">Depuis nos racines créoles</span>
+        <h1 class="text-4xl md:text-6xl font-bold font-serif mt-2">Notre Histoire</h1>
+        <div class="w-24 h-1 bg-gold mx-auto mt-4 rounded-full"></div>
+    </div>
+</section>
+
+<!-- Content -->
+<section class="max-w-5xl mx-auto py-16 px-6 flex flex-col gap-16">
+    <!-- History block -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div class="flex flex-col gap-4" data-aos="fade-right">
+            <h2 class="text-3xl font-bold font-serif text-navy">
+                {{ sections.history.title|default:"L'Authenticité Créole" }}
+            </h2>
+            <p class="text-navy/70 text-sm leading-relaxed">
+                {{ sections.history.content|default:"Kay Mama est née d'un désir profond de partager les recettes traditionnelles de notre enfance. Porté par le savoir-faire créole et antillais, notre établissement à Cayenne allie les classiques haïtiens (comme le Riz Djondjon et le Lalo) et les spécialités de la Guyane Française." }}
+            </p>
+        </div>
+        <div class="rounded-3xl overflow-hidden shadow-xl h-80" data-aos="fade-left">
+            <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover">
+        </div>
+    </div>
+
+    <!-- Mission & Values -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Card 1: Mission -->
+        <div class="card-luxury p-8 flex flex-col gap-4" data-aos="fade-up" data-aos-delay="100">
+            <h3 class="text-xl font-bold font-serif text-navy">Notre Mission</h3>
+            <p class="text-xs text-navy/70 leading-relaxed">Préserver et célébrer le patrimoine culinaire créole en proposant chaque jour des assiettes généreuses, saines et cuisinées maison.</p>
+        </div>
+        <!-- Card 2: Ingredients -->
+        <div class="card-luxury p-8 flex flex-col gap-4" data-aos="fade-up" data-aos-delay="200">
+            <h3 class="text-xl font-bold font-serif text-navy">Produits Frais</h3>
+            <p class="text-xs text-navy/70 leading-relaxed">Tous nos légumes (manioc, igname, patate douce) et aromates proviennent de maraîchers de Cayenne, garantissant fraîcheur et saveurs locales.</p>
+        </div>
+        <!-- Card 3: Culture -->
+        <div class="card-luxury p-8 flex flex-col gap-4" data-aos="fade-up" data-aos-delay="300">
+            <h3 class="text-xl font-bold font-serif text-navy">Accueil Chaleureux</h3>
+            <p class="text-xs text-navy/70 leading-relaxed">Rendre honneur à la convivialité et à l'hospitalité antillaise, en accueillant chaque client comme un membre de la famille.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

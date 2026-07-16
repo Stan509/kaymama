@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block seo_title %}Galerie Photos - Kay Mama Cuisine Créole{% endblock %}
+
+{% block content %}
+<section class="py-12 bg-cover bg-center text-center relative" style="background-image: linear-gradient(rgba(15, 43, 70, 0.8), rgba(15, 43, 70, 0.85)), url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2000&auto=format&fit=crop');">
+    <div class="max-w-4xl mx-auto py-10 px-6" data-aos="fade-up">
+        <span class="text-gold font-script text-2xl">Immersion visuelle</span>
+        <h1 class="text-cream text-4xl md:text-6xl font-bold font-serif mt-2">Galerie Photos</h1>
+        <p class="text-cream/70 text-sm max-w-xl mx-auto mt-4 leading-relaxed">Découvrez l'ambiance chaleureuse de notre restaurant et nos plats préparés en cuisine.</p>
+    </div>
+    <!-- Wave separator -->
+    <div class="absolute bottom-0 inset-x-0 h-8 bg-cream" style="clip-path: ellipse(60% 100% at 50% 100%);"></div>
+</section>
+
+<!-- Gallery Grid -->
+<section class="max-w-7xl mx-auto py-16 px-6" x-data="{ 
+    selectedAlbum: 'ALL',
+    lightboxOpen: false,
+    lightboxImg: '',
+    lightboxTitle: '',
+    lightboxCaption: '',
+    openLightbox(img, title, caption) {
+        this.lightboxImg = img;
+        this.lightboxTitle = title;
+        this.lightboxCaption = caption;
+        this.lightboxOpen = true;
+    }
+}">
+    <!-- Album Filters -->
+    <div class="flex flex-wrap justify-center gap-2 mb-12" data-aos="fade-up">
+        <button @click="selectedAlbum = 'ALL'"
+                :class="selectedAlbum === 'ALL' ? 'bg-navy text-cream' : 'bg-navy/5 text-navy hover:bg-navy/10'"
+                class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition duration-300">
+            Tout voir
+        </button>
+        {% for album in albums %}
+        <button @click="selectedAlbum = '{{ album.slug }}'"
+                :class="selectedAlbum === '{{ album.slug }}' ? 'bg-navy text-cream' : 'bg-navy/5 text-navy hover:bg-navy/10'"
+                class="px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition duration-300">
+            {{ album.name }}
+        </button>
+        {% endfor %}
+    </div>
+
+    <!-- Photos Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" data-aos="fade-up">
+        {% for photo in photos %}
+        <div x-show="selectedAlbum === 'ALL' || selectedAlbum === '{{ photo.album.slug }}'"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-90"
+             x-transition:enter-end="opacity-100 scale-100"
+             class="card-luxury overflow-hidden aspect-square relative group cursor-pointer"
+             @click="openLightbox('{{ photo.image.url }}', '{{ photo.title }}', '{{ photo.caption }}')">
+            
+            <img src="{{ photo.image.url }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            
+            <!-- Hover details overlay -->
+            <div class="absolute inset-0 bg-navy/60 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-6 text-cream">
+                <span class="text-[10px] font-semibold text-gold uppercase tracking-wider">{{ photo.album.name }}</span>
+                <h4 class="font-serif text-lg font-bold mt-1">{{ photo.title|default:"Cuisine Kay Mama" }}</h4>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full py-16 text-center text-navy/50 font-serif italic">
+            Aucune photo disponible pour le moment.
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Lightbox Modal (AlpineJS) -->
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 transition-opacity duration-300" 
+         x-show="lightboxOpen" 
+         x-transition
+         style="display: none;">
+        <button class="absolute top-6 right-6 text-cream hover:text-gold text-3xl focus:outline-none p-2" @click="lightboxOpen = false">
+            ✕
+        </button>
+        
+        <div class="max-w-4xl max-h-[85vh] flex flex-col items-center gap-4" @click.away="lightboxOpen = false">
+            <img :src="lightboxImg" class="max-w-full max-h-[75vh] object-contain rounded-xl border border-white/10 shadow-2xl">
+            <div class="text-center text-cream">
+                <h4 class="font-serif text-xl font-bold text-gold" x-text="lightboxTitle"></h4>
+                <p class="text-xs text-cream/70 mt-1" x-text="lightboxCaption"></p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

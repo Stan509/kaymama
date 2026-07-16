@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block seo_title %}{{ seo_meta.meta_title|default:"Kay Mama | L'Authenticité Créole à chaque bouchée" }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative min-h-[85vh] flex items-center justify-center py-20 px-6 bg-cover bg-center overflow-hidden" style="background-image: linear-gradient(rgba(15, 43, 70, 0.7), rgba(15, 43, 70, 0.75)), url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop');">
+    <!-- Wavy Overlay Element -->
+    <div class="absolute bottom-0 inset-x-0 h-16 bg-cream" style="clip-path: ellipse(60% 100% at 50% 100%);"></div>
+    
+    <div class="max-w-5xl mx-auto text-center z-10 flex flex-col items-center gap-6" data-aos="fade-up">
+        <!-- Floating Accent Text -->
+        <span class="text-gold text-2xl md:text-3xl font-script tracking-widest block transform -rotate-2">Bienvenue chez Kay Mama</span>
+        
+        <!-- Premium Serif Header -->
+        <h1 class="text-cream text-5xl md:text-7xl font-bold tracking-tight leading-tight max-w-4xl font-serif">
+            {{ sections.hero_title.title|default:"L'AUTHENTICITÉ CRÉOLE à chaque bouchée" }}
+        </h1>
+        
+        <p class="text-cream/80 text-lg md:text-xl max-w-2xl font-light leading-relaxed">
+            {{ sections.hero_title.content|default:"Kay Mama Cuisine Créole, c'est bien plus qu'un repas, c'est une expérience culinaire authentique faite de saveurs locales, d'amour et de tradition." }}
+        </p>
+        
+        <!-- CTA Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 mt-6">
+            <a href="{% url 'reservations:book' %}" class="btn-premium-copper text-center text-base font-semibold px-8 py-4 shadow-xl hover:scale-105 transition transform">
+                Réserver une Table
+            </a>
+            <a href="{% url 'menu:menu' %}" class="btn-premium-navy border border-cream/20 text-center text-base font-semibold px-8 py-4 hover:bg-cream hover:text-navy hover:scale-105 transition transform">
+                Découvrir la Carte
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section (Matching Flyer: "Nos Services") -->
+<section class="py-20 px-6 max-w-7xl mx-auto">
+    <div class="text-center mb-16" data-aos="fade-up">
+        <span class="text-copper font-script text-2xl">Ce que nous proposons</span>
+        <h2 class="text-4xl font-bold font-serif text-navy mt-2">Nos Services</h2>
+        <div class="w-24 h-1 bg-gold mx-auto mt-4 rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
+        <!-- Service 1: Repas à emporter -->
+        <div class="card-luxury p-8 flex flex-col items-center text-center gap-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="w-16 h-16 rounded-full bg-navy/5 flex items-center justify-center text-3xl text-navy">🍽️</div>
+            <h3 class="text-xl font-bold font-serif text-navy">REPAS À EMPORTER</h3>
+            <p class="text-sm text-navy/70 leading-relaxed">Commandez vos plats préférés avant 24 heures et venez les récupérer au comptoir.</p>
+        </div>
+
+        <!-- Service 2: Livraison à domicile -->
+        <div class="card-luxury p-8 flex flex-col items-center text-center gap-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="w-16 h-16 rounded-full bg-navy/5 flex items-center justify-center text-3xl text-navy">🚗</div>
+            <h3 class="text-xl font-bold font-serif text-navy">LIVRAISON À DOMICILE</h3>
+            <p class="text-sm text-navy/70 leading-relaxed">Livraison sur Cayenne à partir de 5 plats. Rapide, fiable et savoureuse.</p>
+        </div>
+
+        <!-- Service 3: Événements -->
+        <div class="card-luxury p-8 flex flex-col items-center text-center gap-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="w-16 h-16 rounded-full bg-navy/5 flex items-center justify-center text-3xl text-navy">🎉</div>
+            <h3 class="text-xl font-bold font-serif text-navy">ÉVÉNEMENTS & FESTIVITÉS</h3>
+            <p class="text-sm text-navy/70 leading-relaxed">Anniversaires, mariages, repas privés ou professionnels : nous nous occupons du plaisir.</p>
+        </div>
+
+        <!-- Service 4: Plats personnalisés -->
+        <div class="card-luxury p-8 flex flex-col items-center text-center gap-4" data-aos="fade-up" data-aos-delay="400">
+            <div class="w-16 h-16 rounded-full bg-navy/5 flex items-center justify-center text-3xl text-navy">👨‍🍳</div>
+            <h3 class="text-xl font-bold font-serif text-navy">PLATS PERSONNALISÉS</h3>
+            <p class="text-sm text-navy/70 leading-relaxed">Menus adaptés à vos envies, régimes alimentaires ou occasions spéciales.</p>
+        </div>
+
+        <!-- Service 5: Salon de Beauté -->
+        <a href="{% url 'core:salon' %}" class="card-luxury p-8 flex flex-col items-center text-center gap-4 hover:border-copper transition group" data-aos="fade-up" data-aos-delay="500">
+            <div class="w-16 h-16 rounded-full bg-navy/5 flex items-center justify-center text-3xl text-navy group-hover:bg-copper/10 group-hover:text-copper transition">✨</div>
+            <h3 class="text-xl font-bold font-serif text-navy group-hover:text-copper transition">SALON DE BEAUTÉ</h3>
+            <p class="text-sm text-navy/70 leading-relaxed">Tresses, manucure, soins esthétiques et maquillage sur-mesure dans notre espace beauté.</p>
+        </a>
+    </div>
+</section>
+
+<!-- Presentation Section (Why Kay Mama) -->
+<section class="py-20 px-6 bg-navy text-cream relative">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="flex flex-col gap-6" data-aos="fade-right">
+            <span class="text-gold font-script text-2xl">La différence Kay Mama</span>
+            <h2 class="text-4xl font-bold font-serif text-cream leading-tight">
+                {{ sections.about_title.title|default:"Pourquoi choisir Kay Mama ?" }}
+            </h2>
+            <p class="text-cream/80 leading-relaxed">
+                {{ sections.about_title.content|default:"Parce que chaque moment mérite le meilleur ! Kay Mama cuisine avec passion en utilisant des produits frais et locaux achetés tous les matins au marché de Cayenne." }}
+            </p>
+            <!-- Checkmarks -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                <div class="flex items-center gap-3">
+                    <span class="text-gold text-xl">✓</span>
+                    <span class="text-sm text-cream/90 font-medium">Saveurs créoles authentiques</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-gold text-xl">✓</span>
+                    <span class="text-sm text-cream/90 font-medium">Produits frais et locaux</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-gold text-xl">✓</span>
+                    <span class="text-sm text-cream/90 font-medium">Cuisine généreuse et faite maison</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-gold text-xl">✓</span>
+                    <span class="text-sm text-cream/90 font-medium">Service personnalisé et chaleureux</span>
+                </div>
+            </div>
+        </div>
+        <!-- Right side Image -->
+        <div class="relative rounded-3xl overflow-hidden shadow-2xl h-[450px]" data-aos="fade-left">
+            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1500&auto=format&fit=crop" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-navy/60 to-transparent"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Specialty Dishes / Highlights -->
+<section class="py-20 px-6 max-w-7xl mx-auto">
+    <div class="text-center mb-16" data-aos="fade-up">
+        <span class="text-copper font-script text-2xl">Délices signatures</span>
+        <h2 class="text-4xl font-bold font-serif text-navy mt-2">Spécialités Créoles</h2>
+        <div class="w-24 h-1 bg-gold mx-auto mt-4 rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {% for dish in specialties %}
+        <div class="card-luxury overflow-hidden flex flex-col" data-aos="fade-up" data-aos-delay="{{ forloop.counter|mul:100 }}">
+            <div class="h-64 relative overflow-hidden bg-navy/10">
+                {% if dish.image %}
+                    <img src="{{ dish.image.url }}" class="w-full h-full object-cover hover:scale-110 transition duration-500">
+                {% else %}
+                    <div class="w-full h-full flex items-center justify-center text-navy/40 font-bold">Kay Mama Cuisine</div>
+                {% endif %}
+                <!-- Price Badge -->
+                <span class="absolute top-4 right-4 bg-copper text-cream font-bold px-4 py-2 rounded-full shadow-md text-sm">
+                    {{ dish.price }} €
+                </span>
+            </div>
+            <div class="p-6 flex-grow flex flex-col gap-3 justify-between">
+                <div>
+                    <h3 class="text-xl font-bold font-serif text-navy">{{ dish.name }}</h3>
+                    <p class="text-xs text-navy/60 leading-relaxed mt-2">{{ dish.description }}</p>
+                </div>
+                <div class="mt-4 pt-4 border-t border-navy/5 flex items-center justify-between">
+                    <span class="text-xs font-semibold text-copper uppercase tracking-wider">Spécialité</span>
+                    <button hx-post="{% url 'orders:cart_add_htmx' dish.id %}" hx-swap="outerHTML" class="text-sm font-semibold text-navy hover:text-copper transition flex items-center gap-1 focus:outline-none">
+                        Commander ➔
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Chef Section -->
+<section class="py-20 px-6 bg-cream border-t border-navy/5">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row gap-12 items-center">
+        <!-- Chef Portrait -->
+        <div class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-gold shadow-xl flex-shrink-0" data-aos="zoom-in">
+            <img src="{% static 'img/chef.jpg' %}" class="w-full h-full object-cover">
+        </div>
+        
+        <div class="flex flex-col gap-4 text-center md:text-left" data-aos="fade-up">
+            <span class="text-copper font-script text-2xl">Derrière les fourneaux</span>
+            <h2 class="text-4xl font-bold font-serif text-navy">{{ sections.chef_name.title|default:"Chef Mama" }}</h2>
+            <p class="text-navy/70 leading-relaxed text-sm">
+                {{ sections.chef_name.content|default:"Notre chef perpétue avec passion l'art culinaire créole. Ses recettes secrètes, héritées de générations de cuisinières d'Haïti et des Caraïbes, marient savamment les herbes pays et le piment végétarien pour vous proposer un voyage gustatif inoubliable." }}
+            </p>
+            <div class="mt-2 flex justify-center md:justify-start">
+                <span class="font-serif italic text-gold text-2xl font-bold">Kay Mama Cuisine Créole</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Google Maps Section -->
+<section class="w-full h-[400px] relative mt-12 overflow-hidden border-t border-b border-navy/5">
+    <iframe src="{{ restaurant_settings.google_maps_url|default:'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.223841071489!2d-52.32789182390141!3d4.935747439972338!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8d12163b7ad781ff%3A0xe543df5e967a1fd7!2s48%20Av.%20Fran%C3%A7ois%20Ronjon%2C%20Cayenne%2097300%2C%20French%20Guiana!5e0!3m2!1sen!2s!4v1700000000000!5m2!1sen!2s' }}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</section>
+{% endblock %}

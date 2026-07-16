@@ -1,0 +1,96 @@
+{% load static %}
+
+{% for dish in dishes %}
+<div class="card-luxury overflow-hidden flex flex-col justify-between relative group">
+    <!-- Favorite Heart Badge -->
+    <div class="absolute top-4 left-4 z-10">
+        {% if user.is_authenticated %}
+            {% if dish in user.favorites.all %}
+                <button hx-post="{% url 'menu:toggle_favorite' dish.id %}" hx-swap="outerHTML" class="focus:outline-none transition text-[#B87333] fill-[#B87333]">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                </button>
+            {% else %}
+                <button hx-post="{% url 'menu:toggle_favorite' dish.id %}" hx-swap="outerHTML" class="focus:outline-none transition text-navy/40 hover:text-[#B87333]">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                </button>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <!-- Image -->
+    <div class="h-56 relative overflow-hidden bg-navy/10">
+        {% if dish.image %}
+            <img src="{{ dish.image.url }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+        {% else %}
+            <div class="w-full h-full flex items-center justify-center text-navy/30 font-serif italic text-sm">
+                Kay Mama Cuisine
+            </div>
+        {% endif %}
+        <!-- Price Badge -->
+        <span class="absolute top-4 right-4 bg-navy text-cream font-bold px-3 py-1.5 rounded-full shadow-md text-xs">
+            {{ dish.price }} €
+        </span>
+    </div>
+
+    <!-- Info & Order Form -->
+    <div class="p-6 flex-grow flex flex-col justify-between gap-4">
+        <div>
+            <div class="flex items-start justify-between gap-2">
+                <h3 class="text-lg font-bold font-serif text-navy group-hover:text-copper transition duration-300">
+                    {{ dish.name }}
+                </h3>
+            </div>
+            <p class="text-xs text-navy/60 leading-relaxed mt-2 line-clamp-3">
+                {{ dish.description }}
+            </p>
+        </div>
+
+        <!-- Add to cart form -->
+        <form hx-post="{% url 'orders:cart_add_htmx' dish.id %}" hx-target="#cart-counter" class="flex flex-col gap-3 mt-2 border-t border-navy/5 pt-4">
+            {% csrf_token %}
+            
+            <!-- Variants if present -->
+            {% if dish.variants.all %}
+                <div class="flex flex-col gap-1">
+                    <label class="text-[10px] font-semibold tracking-wider text-navy/60 uppercase">Option</label>
+                    <select name="variant" class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-none focus:border-copper">
+                        <option value="">Normal (Inclus)</option>
+                        {% for var in dish.variants.all %}
+                            <option value="{{ var.id }}">{{ var.name }} (+{{ var.additional_price }} €)</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+
+            <!-- Quantity & Submit -->
+            <div class="flex items-center gap-2">
+                <!-- Quantity input -->
+                <div class="flex items-center border border-navy/10 rounded-xl overflow-hidden bg-[#F7F3EC]/50">
+                    <input type="number" name="quantity" value="1" min="1" max="10" 
+                           class="w-12 text-center text-xs font-semibold bg-transparent border-0 focus:ring-0 py-2.5 text-navy">
+                </div>
+
+                <!-- Add Button -->
+                {% if dish.is_in_stock %}
+                    <button type="submit" class="flex-grow btn-premium-copper text-center text-xs font-semibold py-2.5 px-4 shadow-sm hover:scale-102 transition transform">
+                        Ajouter au Panier
+                    </button>
+                {% else %}
+                    <button type="button" disabled class="flex-grow bg-navy/10 text-navy/40 cursor-not-allowed rounded-xl text-center text-xs font-semibold py-2.5 px-4">
+                        Rupture de Stock
+                    </button>
+                {% endif %}
+            </div>
+            
+            <!-- Low stock warnings -->
+            {% if dish.stock_level > 0 and dish.stock_level < 8 %}
+                <span class="text-[10px] font-semibold text-orange block text-center mt-1 animate-pulse">⚠️ Seulement {{ dish.stock_level }} restants !</span>
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% empty %}
+<div class="col-span-full py-16 text-center text-navy/50 font-serif italic">
+    Aucun plat trouvé correspondant à votre recherche.
+</div>
+{% endfor %}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block seo_title %}Commande confirmée ! - Kay Mama{% endblock %}
+
+{% block content %}
+<section class="max-w-3xl mx-auto py-16 px-6 text-center flex flex-col items-center gap-8">
+    <div class="w-20 h-20 rounded-full bg-green/10 text-green flex items-center justify-center text-5xl">
+        🎉
+    </div>
+
+    <div class="flex flex-col gap-3">
+        <h1 class="text-4xl font-bold font-serif text-navy">Merci pour votre commande !</h1>
+        <p class="text-navy/70 max-w-md mx-auto">Votre commande a été transmise en cuisine. Un e-mail de confirmation vient de vous être envoyé.</p>
+    </div>
+
+    <!-- Order summary card -->
+    <div class="card-luxury p-8 w-full text-left flex flex-col gap-6">
+        <div class="flex flex-col sm:flex-row justify-between border-b border-navy/5 pb-4 gap-2">
+            <div>
+                <span class="text-xs text-navy/50 font-semibold uppercase">Numéro de Commande</span>
+                <span class="text-lg font-bold text-navy block">{{ order.order_number }}</span>
+            </div>
+            <div>
+                <span class="text-xs text-navy/50 font-semibold uppercase">Statut</span>
+                <span class="text-sm font-bold text-copper block">{{ order.get_status_display }}</span>
+            </div>
+            <div>
+                <span class="text-xs text-navy/50 font-semibold uppercase">Heure estimée</span>
+                <span class="text-sm font-bold text-navy block">{{ order.delivery_time|date:"H:i" }} (le {{ order.delivery_time|date:"d/m/Y" }})</span>
+            </div>
+        </div>
+
+        <div>
+            <h4 class="text-sm font-semibold text-navy/60 uppercase mb-3">Récapitulatif des articles</h4>
+            <div class="flex flex-col gap-3">
+                {% for item in order.items.all %}
+                <div class="flex justify-between items-center text-sm border-b border-navy/5 pb-2">
+                    <span>
+                        <span class="font-bold text-navy">{{ item.quantity }} x</span>
+                        <span class="text-navy/80 ml-1">{{ item.dish.name }}</span>
+                        {% if item.variant %}
+                            <span class="text-xs text-copper bg-copper/5 px-2 py-0.5 rounded-full ml-2">{{ item.variant.name }}</span>
+                        {% endif %}
+                    </span>
+                    <span class="font-semibold text-navy/70">{{ item.total_item_price }} €</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center border-t border-navy/10 pt-4 font-bold text-navy">
+            <span>Total Payé / Dû</span>
+            <span class="text-lg">{{ order.total_price }} €</span>
+        </div>
+        
+        <div class="bg-navy/5 border border-navy/10 rounded-2xl p-4 text-xs leading-relaxed text-navy/70">
+            <span class="font-bold block mb-1">Détails du retrait :</span>
+            {% if order.delivery_method == 'PICKUP' %}
+                Retrait au comptoir du restaurant à l'adresse : **48 Av. François Ronjon, 97300 Cayenne**.
+            {% else %}
+                Livraison à domicile à l'adresse fournie : **{{ order.delivery_address }}**.
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Print receipt and navigations -->
+    <div class="flex gap-4">
+        <button onclick="window.print()" class="btn-premium-navy text-sm font-semibold">
+            Imprimer le reçu
+        </button>
+        <a href="{% url 'core:home' %}" class="btn-premium-copper text-sm font-semibold">
+            Retourner à l'accueil
+        </a>
+    </div>
+</section>
+{% endblock %}

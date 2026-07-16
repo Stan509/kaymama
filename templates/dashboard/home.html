@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Gérant - Kay Mama</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cream: '#F7F3EC',
+              navy: '#0F2B46',
+              copper: '#B87333',
+              gold: '#D9A441',
+              brown: '#6B4325',
+              orange: '#D67A2C',
+              green: '#567C4D',
+            }
+          }
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <!-- AlpineJS -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-cream text-navy min-h-screen flex flex-col md:flex-row" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }" :class="{ 'dark-mode': darkMode }">
+    <!-- Sidebar navigation -->
+    <aside class="w-full md:w-64 bg-navy text-cream flex-shrink-0 flex flex-col justify-between border-r border-cream/10">
+        <div>
+            <!-- Header -->
+            <div class="p-6 border-b border-cream/10">
+                <h1 class="text-xl font-bold font-serif tracking-widest text-gold text-center">KAY MAMA</h1>
+                <p class="text-[10px] text-center text-cream/50 uppercase font-semibold mt-1">Espace Gérant</p>
+            </div>
+            <!-- Menu links -->
+            <div class="flex flex-col gap-2 p-4 text-sm font-medium">
+                <a href="{% url 'dashboard:home' %}" class="px-4 py-3 rounded-xl hover:bg-cream/10 transition bg-cream/15 text-gold">📊 Vue d'ensemble</a>
+                <a href="{% url 'dashboard:kitchen' %}" class="px-4 py-3 rounded-xl hover:bg-cream/10 transition">🍳 Écran Cuisine</a>
+                <a href="{% url 'dashboard:orders' %}" class="px-4 py-3 rounded-xl hover:bg-cream/10 transition">🛍️ Commandes</a>
+                <a href="{% url 'dashboard:reservations' %}" class="px-4 py-3 rounded-xl hover:bg-cream/10 transition">📅 Réservations</a>
+                <a href="{% url 'dashboard:menu' %}" class="px-4 py-3 rounded-xl hover:bg-cream/10 transition">🍽️ Gestion Carte</a>
+                <a href="{% url 'dashboard:settings' %}" class="px-4 py-3 rounded-xl hover:bg-cream/10 transition">⚙️ Paramètres</a>
+            </div>
+        </div>
+        
+        <!-- Sidebar Footer & Dark Mode -->
+        <div class="p-6 border-t border-cream/10 flex flex-col gap-4">
+            <!-- Dark mode toggle -->
+            <button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode)" class="w-full py-2 bg-cream/10 rounded-xl text-xs font-semibold hover:bg-cream/20 transition flex items-center justify-center gap-2">
+                <span x-text="darkMode ? '☀️ Mode Clair' : '🌙 Mode Sombre'"></span>
+            </button>
+            <a href="{% url 'core:home' %}" class="text-xs text-cream/60 hover:text-gold text-center underline">Retourner au Site web</a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-grow p-6 md:p-10 max-h-screen overflow-y-auto">
+        <!-- Top bar -->
+        <header class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold font-serif">Tableau de bord</h2>
+            <div class="flex items-center gap-4 text-xs font-medium">
+                <span>Gérant : **{{ user.first_name|default:user.username }}**</span>
+                <a href="{% url 'accounts:logout' %}" class="text-red-500 hover:underline">Déconnexion</a>
+            </div>
+        </header>
+
+        {% block dashboard_content %}
+        <!-- Metric Cards -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            <!-- Card 1: Revenue -->
+            <div class="card-luxury p-6 flex flex-col gap-2">
+                <span class="text-xs text-navy/50 font-semibold uppercase">Revenu Global (Livré)</span>
+                <span class="text-3xl font-bold">{{ total_sales }} €</span>
+            </div>
+            <!-- Card 2: Orders -->
+            <div class="card-luxury p-6 flex flex-col gap-2">
+                <span class="text-xs text-navy/50 font-semibold uppercase">Total Commandes</span>
+                <span class="text-3xl font-bold">{{ orders_count }}</span>
+            </div>
+            <!-- Card 3: Reservations -->
+            <div class="card-luxury p-6 flex flex-col gap-2">
+                <span class="text-xs text-navy/50 font-semibold uppercase">Tables Confirmées</span>
+                <span class="text-3xl font-bold">{{ reservations_count }}</span>
+            </div>
+            <!-- Card 4: Ticket Moyen -->
+            <div class="card-luxury p-6 flex flex-col gap-2">
+                <span class="text-xs text-navy/50 font-semibold uppercase">Panier Moyen</span>
+                <span class="text-3xl font-bold">{{ avg_order_value|floatformat:2 }} €</span>
+            </div>
+        </section>
+
+        <!-- Charts & Best Sellers -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+            <!-- Chart (Left 2 cols) -->
+            <div class="card-luxury p-6 lg:col-span-2">
+                <h3 class="text-lg font-bold font-serif mb-4">Chiffre d'affaires (7 derniers jours)</h3>
+                <div class="h-64">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Best Sellers (Right col) -->
+            <div class="card-luxury p-6">
+                <h3 class="text-lg font-bold font-serif mb-4">Plats les plus populaires</h3>
+                <div class="flex flex-col gap-4">
+                    {% for bs in best_sellers %}
+                    <div class="flex justify-between items-center text-sm border-b border-navy/5 pb-2">
+                        <div>
+                            <span class="font-bold text-navy">{{ bs.total_qty }} x</span>
+                            <span class="text-navy/80 ml-1">{{ bs.dish__name }}</span>
+                        </div>
+                        <span class="font-semibold text-navy/60">{{ bs.dish__price }} €</span>
+                    </div>
+                    {% empty %}
+                        <p class="text-xs text-navy/40 italic py-4">Pas de ventes à afficher.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent activities -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Recent orders -->
+            <div class="card-luxury p-6">
+                <h3 class="text-lg font-bold font-serif mb-4">Commandes Récentes</h3>
+                <div class="divide-y divide-navy/5 text-xs">
+                    {% for order in recent_orders %}
+                    <div class="py-3 flex justify-between items-center">
+                        <div>
+                            <span class="font-bold">{{ order.order_number }}</span>
+                            <span class="text-navy/50 ml-1">({{ order.get_delivery_method_display }})</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span>{{ order.total_price }} €</span>
+                            <span class="font-bold text-copper">{{ order.get_status_display }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Recent reservations -->
+            <div class="card-luxury p-6">
+                <h3 class="text-lg font-bold font-serif mb-4">Réservations Récentes</h3>
+                <div class="divide-y divide-navy/5 text-xs">
+                    {% for res in recent_reservations %}
+                    <div class="py-3 flex justify-between items-center">
+                        <div>
+                            <span class="font-bold">{{ res.first_name }} {{ res.last_name }}</span>
+                            <span class="text-navy/50 ml-1">({{ res.guest_count }} pers.)</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span>{{ res.date|date:"d/m" }} - {{ res.time_slot|time:"H:i" }}</span>
+                            <span class="font-bold text-copper">{{ res.get_status_display }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% endblock %}
+    </main>
+
+    {% block extra_scripts %}
+    <!-- Chart script -->
+    <script>
+        const ctx = document.getElementById('salesChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {{ sales_labels|safe }},
+                    datasets: [{
+                        label: 'Revenus (€)',
+                        data: {{ sales_values|safe }},
+                        borderColor: '#B87333',
+                        backgroundColor: 'rgba(184, 115, 51, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+    </script>
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,47 @@
+{% extends 'dashboard/home.html' %}
+
+{% block dashboard_content %}
+<section class="card-luxury p-8">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-navy/5 pb-6 mb-8 gap-4">
+        <div>
+            <h3 class="text-xl font-bold font-serif text-navy">Gestion des Réservations</h3>
+            <p class="text-xs text-navy/60 mt-1">Gérez, confirmez ou refusez les demandes de table en temps réel.</p>
+        </div>
+        <!-- Status filter links -->
+        <div class="flex gap-2 text-xs font-semibold uppercase tracking-wider">
+            <a href="?status=" class="px-3 py-1.5 rounded-full {% if not status_filter %}bg-navy text-cream{% else %}bg-navy/5 text-navy/60 hover:bg-navy/10{% endif %}">Tous</a>
+            <a href="?status=PENDING" class="px-3 py-1.5 rounded-full {% if status_filter == 'PENDING' %}bg-navy text-cream{% else %}bg-navy/5 text-navy/60 hover:bg-navy/10{% endif %}">En attente</a>
+            <a href="?status=APPROVED" class="px-3 py-1.5 rounded-full {% if status_filter == 'APPROVED' %}bg-navy text-cream{% else %}bg-navy/5 text-navy/60 hover:bg-navy/10{% endif %}">Confirmées</a>
+            <a href="?status=REJECTED" class="px-3 py-1.5 rounded-full {% if status_filter == 'REJECTED' %}bg-navy text-cream{% else %}bg-navy/5 text-navy/60 hover:bg-navy/10{% endif %}">Refusées</a>
+        </div>
+    </div>
+
+    <!-- Reservations Table -->
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="border-b border-navy/10 text-xs font-semibold uppercase tracking-wider text-navy/60">
+                    <th class="py-4 px-6">Client</th>
+                    <th class="py-4 px-6">Date & Heure</th>
+                    <th class="py-4 px-6 text-center">Invités</th>
+                    <th class="py-4 px-6 text-center">Occasion</th>
+                    <th class="py-4 px-6">Notes / Demandes</th>
+                    <th class="py-4 px-6 text-center">Statut</th>
+                    <th class="py-4 px-6 text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-navy/5 text-sm">
+                {% for res in reservations %}
+                    {% include 'dashboard/partials/reservation_row.html' %}
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="py-12 text-center text-navy/40 font-serif italic">
+                        Aucune demande de réservation trouvée.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

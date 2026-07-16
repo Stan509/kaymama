@@ -1,0 +1,317 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block seo_title %}{{ restaurant_settings.name|default:"Kay Mama Cuisine Créole" }}{% endblock %}</title>
+    <meta name="description" content="{% block seo_description %}L'authenticité créole à chaque bouchée chez Kay Mama. Plats à emporter et livraison à Cayenne, Guyane Française.{% endblock %}">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{% url 'core:manifest_json' %}">
+    <meta name="theme-color" content="#0F2B46">
+    <link rel="icon" type="image/png" href="{% static 'img/icon-192.png' %}">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cream: '#F7F3EC',
+              navy: '#0F2B46',
+              copper: '#B87333',
+              gold: '#D9A441',
+              brown: '#6B4325',
+              orange: '#D67A2C',
+              green: '#567C4D',
+            }
+          }
+        }
+      }
+    </script>
+    
+    <!-- AOS CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    
+    <!-- HTMX CDN -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    <!-- AlpineJS CDN -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- GSAP for advanced animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="flex flex-col min-h-screen text-navy" x-data="{ mobileMenu: false, cartDrawer: false }">
+    
+    <!-- Loading Animation Screen -->
+    <div id="loader" class="loading-screen transition-opacity duration-700">
+        <div class="text-center">
+            <h1 class="text-cream text-4xl md:text-6xl font-bold tracking-widest font-serif mb-4 animate-pulse">KAY MAMA</h1>
+            <p class="text-gold text-lg md:text-xl font-script tracking-wide">L'authenticité créole à chaque bouchée...</p>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-cream/90 backdrop-blur-md border-b border-navy/5 px-6 py-4">
+        <nav class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Logo -->
+            <a href="{% url 'core:home' %}" class="flex items-center gap-3">
+                <span class="text-2xl md:text-3xl font-bold text-navy tracking-tight font-serif">KAY MAMA</span>
+                <span class="hidden md:inline-block h-6 w-px bg-navy/20"></span>
+                <span class="hidden md:inline-block text-xs font-semibold tracking-widest text-copper">CUISINE & BEAUTÉ</span>
+            </a>
+
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex items-center gap-6 font-medium">
+                <a href="{% url 'core:home' %}" class="text-navy hover:text-copper transition duration-300">Accueil</a>
+                <a href="{% url 'menu:menu' %}" class="text-navy hover:text-copper transition duration-300">Cuisine créole</a>
+                <a href="{% url 'core:salon' %}" class="text-navy hover:text-copper transition duration-300">Salon de Beauté</a>
+                <a href="{% url 'reservations:book' %}" class="text-navy hover:text-copper transition duration-300">Réserver</a>
+                <a href="{% url 'events:request_quote' %}" class="text-navy hover:text-copper transition duration-300">Événements</a>
+                <a href="{% url 'blog:list' %}" class="text-navy hover:text-copper transition duration-300">Blog</a>
+                <a href="{% url 'gallery:gallery' %}" class="text-navy hover:text-copper transition duration-300">Galerie</a>
+                <a href="{% url 'core:contact' %}" class="text-navy hover:text-copper transition duration-300">Contact</a>
+                {% if user.is_authenticated and user.is_staff_member %}
+                    <a href="{% url 'dashboard:home' %}" class="text-copper hover:text-navy transition duration-300 font-semibold">Tableau de bord</a>
+                {% endif %}
+            </div>
+
+            <!-- Header Actions -->
+            <div class="flex items-center gap-4">
+                <!-- Cart Trigger Button -->
+                <button @click="cartDrawer = true" class="relative p-2 text-navy hover:text-copper transition focus:outline-none">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    <span id="cart-counter" class="absolute -top-1 -right-1 bg-copper text-cream text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                        {{ global_cart_count }}
+                    </span>
+                </button>
+
+                <!-- Profile Dropdown or Login -->
+                {% if user.is_authenticated %}
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" class="flex items-center gap-2 focus:outline-none p-1 border border-navy/10 rounded-full hover:border-copper transition duration-300">
+                            {% if user.avatar %}
+                                <img src="{{ user.avatar.url }}" class="w-8 h-8 rounded-full object-cover">
+                            {% else %}
+                                <div class="w-8 h-8 rounded-full bg-navy/10 text-navy flex items-center justify-center font-bold text-sm">
+                                    {{ user.username|slice:":1"|upper }}
+                                </div>
+                            {% endif %}
+                        </button>
+                        <!-- Dropdown Menu -->
+                        <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-cream border border-navy/10 rounded-2xl shadow-xl py-2 z-50">
+                            <div class="px-4 py-2 border-b border-navy/5 text-xs text-navy/60 font-semibold truncate">{{ user.email }}</div>
+                            {% if user.is_staff_member %}
+                                <a href="{% url 'dashboard:home' %}" class="block px-4 py-2 text-navy hover:bg-[#0f2b46]/5 transition">Tableau de bord</a>
+                            {% endif %}
+                            <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-navy hover:bg-[#0f2b46]/5 transition">Mon Compte</a>
+                            <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-red-600 hover:bg-[#0f2b46]/5 transition font-medium">Déconnexion</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}" class="hidden sm:inline-block btn-premium-navy text-sm py-2 px-5">Connexion</a>
+                {% endif %}
+
+                <!-- Mobile Menu Button -->
+                <button @click="mobileMenu = !mobileMenu" class="lg:hidden p-2 text-navy focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu Links Drawer -->
+        <div x-show="mobileMenu" @click.away="mobileMenu = false" class="lg:hidden mt-4 border-t border-navy/5 pt-4 flex flex-col gap-3 font-medium">
+            <a href="{% url 'core:home' %}" class="text-navy hover:text-copper py-1 transition">Accueil</a>
+            <a href="{% url 'menu:menu' %}" class="text-navy hover:text-copper py-1 transition">Cuisine créole</a>
+            <a href="{% url 'core:salon' %}" class="text-navy hover:text-copper py-1 transition">Salon de Beauté</a>
+            <a href="{% url 'reservations:book' %}" class="text-navy hover:text-copper py-1 transition">Réserver</a>
+            <a href="{% url 'events:request_quote' %}" class="text-navy hover:text-copper py-1 transition">Événements</a>
+            <a href="{% url 'blog:list' %}" class="text-navy hover:text-copper py-1 transition">Blog</a>
+            <a href="{% url 'gallery:gallery' %}" class="text-navy hover:text-copper py-1 transition">Galerie</a>
+            <a href="{% url 'core:contact' %}" class="text-navy hover:text-copper py-1 transition">Contact</a>
+            {% if user.is_authenticated and user.is_staff_member %}
+                <a href="{% url 'dashboard:home' %}" class="text-copper hover:text-navy py-1 transition font-semibold">Tableau de bord</a>
+            {% endif %}
+            {% if not user.is_authenticated %}
+                <a href="{% url 'accounts:login' %}" class="btn-premium-navy text-center py-2">Connexion</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- Notification Toast Messages -->
+    {% if messages %}
+        <div class="fixed top-24 right-6 z-50 flex flex-col gap-3 max-w-sm w-full">
+            {% for msg in messages %}
+                <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" class="flex items-center gap-3 p-4 rounded-2xl shadow-lg border {% if msg.tags == 'error' %} bg-red-50 border-red-200 text-red-800 {% else %} bg-green-50 border-green-200 text-green-800 {% endif %}">
+                    <span class="text-sm font-medium flex-1">{{ msg }}</span>
+                    <button @click="show = false" class="text-navy/40 hover:text-navy focus:outline-none">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Slide-Out Shopping Cart Drawer (AlpineJS) -->
+    <div class="fixed inset-0 overflow-hidden z-50" x-show="cartDrawer" style="display: none;">
+        <div class="absolute inset-0 bg-navy/40 backdrop-blur-sm transition-opacity" @click="cartDrawer = false"></div>
+        <div class="absolute inset-y-0 right-0 max-w-full flex">
+            <div class="w-screen max-w-md bg-cream shadow-2xl flex flex-col border-l border-navy/5">
+                <!-- Drawer Header -->
+                <div class="px-6 py-5 border-b border-navy/10 flex items-center justify-between">
+                    <h3 class="text-xl font-bold font-serif text-navy">Votre Panier</h3>
+                    <button @click="cartDrawer = false" class="p-2 text-navy hover:text-copper focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </div>
+                <!-- Drawer Content -->
+                <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-6" id="cart-drawer-items">
+                    <p class="text-navy/60 text-center py-12">Chargement du panier...</p>
+                </div>
+                <!-- Drawer Footer -->
+                <div class="p-6 border-t border-navy/10 bg-white/50 flex flex-col gap-4">
+                    <a href="{% url 'orders:cart_detail' %}" class="btn-premium-navy text-center py-3">Voir le panier complet</a>
+                    <a href="{% url 'orders:checkout' %}" class="btn-premium-copper text-center py-3">Procéder au paiement</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-navy text-cream pt-16 pb-8 px-6 mt-12">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 border-b border-cream/10 pb-12">
+            <!-- Col 1: About -->
+            <div class="flex flex-col gap-4">
+                <h3 class="text-2xl font-bold font-serif tracking-wide text-gold">KAY MAMA</h3>
+                <p class="text-sm text-cream/70 leading-relaxed">Bien plus qu'un repas, une expérience culinaire authentique faite de saveurs locales, d'amour et de tradition.</p>
+                <div class="flex gap-4 mt-2">
+                    <a href="#" class="text-cream/50 hover:text-gold transition duration-300">Facebook</a>
+                    <a href="#" class="text-cream/50 hover:text-gold transition duration-300">Instagram</a>
+                    <a href="https://wa.me/594694081280" class="text-cream/50 hover:text-gold transition duration-300">WhatsApp</a>
+                </div>
+            </div>
+
+            <!-- Col 2: Hours -->
+            <div class="flex flex-col gap-4">
+                <h4 class="text-lg font-bold font-serif text-gold">Horaires d'ouverture</h4>
+                <div class="flex flex-col gap-2 text-sm text-cream/70">
+                    {% for oh in opening_hours %}
+                        <div class="flex justify-between border-b border-cream/5 pb-1">
+                            <span>{{ oh.get_day_of_week_display }}</span>
+                            <span class="font-medium">
+                                {% if oh.is_closed %} Fermé {% else %} {{ oh.opening_time|time:"H:i" }} - {{ oh.closing_time|time:"H:i" }} {% endif %}
+                            </span>
+                        </div>
+                    {% empty %}
+                        <p>Lundi - Samedi : 11:30 - 22:00<br>Dimanche : Fermé</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Col 3: Quick Links -->
+            <div class="flex flex-col gap-4">
+                <h4 class="text-lg font-bold font-serif text-gold">Liens rapides</h4>
+                <div class="flex flex-col gap-2 text-sm text-cream/70">
+                    <a href="{% url 'menu:menu' %}" class="hover:text-gold transition">Notre Carte & Menu</a>
+                    <a href="{% url 'reservations:book' %}" class="hover:text-gold transition">Réserver une table</a>
+                    <a href="{% url 'events:request_quote' %}" class="hover:text-gold transition">Formulaire Traiteur / Événement</a>
+                    <a href="{% url 'blog:list' %}" class="hover:text-gold transition">Recettes & Actualités</a>
+                </div>
+            </div>
+
+            <!-- Col 4: Contact & Location -->
+            <div class="flex flex-col gap-4">
+                <h4 class="text-lg font-bold font-serif text-gold">Contact</h4>
+                <div class="flex flex-col gap-3 text-sm text-cream/70">
+                    <div class="flex items-start gap-2">
+                        <span>📍</span>
+                        <span>48 Av. François Ronjon, 97300 Cayenne</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span>📞</span>
+                        <span>694 08 12 80</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span>✉️</span>
+                        <span>contact@kaymama.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-xs text-cream/40 mt-8 gap-4">
+            <p>&copy; 2026 Kay Mama Cuisine Créole. Tous droits réservés. Guyane Française.</p>
+            <div class="flex gap-4">
+                <a href="#" class="hover:underline">Mentions légales</a>
+                <a href="#" class="hover:underline">Politique de confidentialité</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Service Worker Registration for PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker Registered!', reg))
+                    .catch(err => console.log('Service Worker Register Failed', err));
+            });
+        }
+    </script>
+
+    <!-- AOS and GSAP Initialization scripts -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        // Dismiss loader screen
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 700);
+            }
+        });
+
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Intercept HX-Trigger for cart updates
+        document.body.addEventListener('updateCartBadge', function(evt) {
+            const counter = document.getElementById('cart-counter');
+            if (counter) {
+                counter.innerText = evt.detail;
+                // Add minor bounce animation
+                counter.classList.add('animate-bounce');
+                setTimeout(() => counter.classList.remove('animate-bounce'), 1000);
+            }
+        });
+
+        // Fetch cart drawer items dynamically on drawer open
+        document.body.addEventListener('click', function(e) {
+            // Check if cart button or click opens cart
+        });
+    </script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

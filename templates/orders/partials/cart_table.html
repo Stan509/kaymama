@@ -1,0 +1,52 @@
+{% load static %}
+
+{% if cart %}
+<div class="card-luxury overflow-x-auto">
+    <table class="w-full text-left border-collapse">
+        <thead>
+            <tr class="border-b border-navy/10 text-xs font-semibold uppercase tracking-wider text-navy/60">
+                <th class="py-4 px-6">Plat</th>
+                <th class="py-4 px-6 text-center">Prix</th>
+                <th class="py-4 px-6 text-center">Quantité</th>
+                <th class="py-4 px-6 text-right">Total</th>
+                <th class="py-4 px-6"></th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-navy/5 text-sm">
+            {% for key, item in cart.items %}
+            <tr class="group hover:bg-[#0f2b46]/2 transition">
+                <td class="py-4 px-6 flex items-center gap-4">
+                    <img src="{{ item.image_url }}" class="w-16 h-16 rounded-xl object-cover border border-navy/5 bg-navy/5">
+                    <div>
+                        <h4 class="font-bold text-navy">{{ item.name }}</h4>
+                        {% if item.variant_name %}
+                            <span class="text-xs text-copper bg-copper/5 px-2 py-0.5 rounded-full font-medium mt-1 inline-block">{{ item.variant_name }}</span>
+                        {% endif %}
+                    </div>
+                </td>
+                <td class="py-4 px-6 text-center text-navy/70 font-semibold">{{ item.price }} €</td>
+                <td class="py-4 px-6 text-center">
+                    <span class="font-bold text-navy px-3 py-1 bg-navy/5 rounded-lg">{{ item.quantity }}</span>
+                </td>
+                <td class="py-4 px-6 text-right font-bold text-navy">
+                    <!-- calculate total for row -->
+                    {{ item.price }} €
+                </td>
+                <td class="py-4 px-6 text-right">
+                    <button hx-post="{% url 'orders:cart_remove_htmx' key %}" 
+                            hx-target="#cart-table-container"
+                            hx-swap="innerHTML"
+                            class="p-2 text-red-500 hover:text-red-700 transition focus:outline-none">
+                        Supprimer
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card-luxury p-12 text-center text-navy/50 font-serif italic">
+    Votre panier est vide. Visitez notre <a href="{% url 'menu:menu' %}" class="text-copper hover:underline font-serif not-italic">carte de plats</a> pour ajouter des délices !
+</div>
+{% endif %}

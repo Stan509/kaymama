@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block seo_title %}Connexion - Kay Mama Cuisine Créole{% endblock %}
+
+{% block content %}
+<section class="max-w-md mx-auto py-20 px-6">
+    <div class="card-luxury p-8 md:p-10 flex flex-col gap-6" data-aos="fade-up">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold font-serif text-navy">Connexion</h1>
+            <p class="text-xs text-navy/60 mt-1">Connectez-vous pour voir vos commandes et réservations.</p>
+        </div>
+
+        <form method="POST" action="{% url 'accounts:login' %}" class="flex flex-col gap-5">
+            {% csrf_token %}
+            
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-semibold text-navy/60 uppercase">Nom d'utilisateur</label>
+                <input type="text" name="username" required class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-xl px-4 py-3 text-[#0F2B46] focus:outline-none focus:border-[#B87333]">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <div class="flex justify-between items-center">
+                    <label class="text-xs font-semibold text-navy/60 uppercase">Mot de passe</label>
+                    <a href="#" class="text-[10px] font-semibold text-copper hover:underline uppercase">Mot de passe oublié ?</a>
+                </div>
+                <input type="password" name="password" required class="w-full bg-[#F7F3EC]/50 border border-[#0F2B46]/10 rounded-xl px-4 py-3 text-[#0F2B46] focus:outline-none focus:border-[#B87333]">
+            </div>
+
+            <button type="submit" class="btn-premium-copper text-center py-3.5 font-semibold mt-2 hover:scale-102 transition transform w-full">
+                Se Connecter
+            </button>
+        </form>
+
+        <p class="text-xs text-navy/60 text-center">
+            Nouveau chez Kay Mama ? <a href="{% url 'accounts:register' %}" class="text-copper font-semibold hover:underline">Créer un compte</a>
+        </p>
+    </div>
+</section>
+{% endblock %}

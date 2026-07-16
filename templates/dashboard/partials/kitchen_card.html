@@ -1,0 +1,58 @@
+<div class="kitchen-card card-luxury p-6 flex flex-col justify-between border-t-4 {% if order.status == 'INCOMING' %} border-t-orange {% else %} border-t-gold {% endif %} gap-4">
+    <!-- Header -->
+    <div class="flex justify-between items-start border-b border-navy/5 pb-3">
+        <div>
+            <h4 class="font-bold text-navy text-lg">{{ order.order_number }}</h4>
+            <span class="text-[10px] text-navy/40 font-semibold block mt-0.5">{{ order.created_at|date:"H:i" }} (il y a {{ order.created_at|timesince }})</span>
+        </div>
+        <span class="text-[10px] font-bold uppercase px-2.5 py-1 rounded-full 
+            {% if order.delivery_method == 'DELIVERY' %} bg-orange text-cream {% else %} bg-navy text-cream {% endif %}">
+            {{ order.get_delivery_method_display }}
+        </span>
+    </div>
+
+    <!-- Items List -->
+    <div class="flex-grow flex flex-col gap-2">
+        <span class="text-[10px] font-semibold text-navy/60 uppercase">Articles</span>
+        <div class="flex flex-col gap-1.5">
+            {% for item in order.items.all %}
+            <div class="text-sm font-semibold text-navy flex justify-between border-b border-navy/2 pb-1">
+                <span>
+                    <span class="text-copper font-bold">{{ item.quantity }} x</span>
+                    <span>{{ item.dish.name }}</span>
+                    {% if item.variant %}
+                        <span class="block text-[10px] text-copper/80 font-normal mt-0.5">{{ item.variant.name }}</span>
+                    {% endif %}
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Special notes -->
+    {% if order.special_instructions %}
+    <div class="bg-gold/10 border border-gold/20 rounded-xl p-3 text-xs leading-relaxed text-navy/80">
+        <span class="font-bold text-brown block mb-1">Notes Client :</span>
+        " {{ order.special_instructions }} "
+    </div>
+    {% endif %}
+
+    <!-- Footer Actions -->
+    <div class="border-t border-navy/5 pt-4 mt-2">
+        {% if order.status == 'INCOMING' %}
+            <button hx-post="{% url 'dashboard:update_order_status' order.id 'PREPARING' %}"
+                    hx-target="closest .kitchen-card"
+                    hx-swap="outerHTML"
+                    class="w-full btn-premium-navy text-center py-2.5 text-xs font-semibold hover:scale-102 transition transform">
+                Commencer la préparation
+            </button>
+        {% elif order.status == 'PREPARING' %}
+            <button hx-post="{% url 'dashboard:update_order_status' order.id 'READY' %}"
+                    hx-target="closest .kitchen-card"
+                    hx-swap="outerHTML"
+                    class="w-full btn-premium-copper text-center py-2.5 text-xs font-semibold hover:scale-102 transition transform">
+                Marquer comme Prêt
+            </button>
+        {% endif %}
+    </div>
+</div>
