@@ -1,0 +1,50 @@
+name: kaymama
+region: nyc
+services:
+  - name: web
+    git:
+      repo_clone_url: https://github.com/Stan509/kaymama.git
+      branch: main
+    dockerfile_path: Dockerfile
+    envs:
+      - key: DATABASE_URL
+        value: ${db.DATABASE_URL}
+        scope: RUN_AND_BUILD_TIME
+      - key: DEBUG
+        value: "False"
+        scope: RUN_TIME
+      - key: ALLOWED_HOSTS
+        value: "kaymama.online,www.kaymama.online,localhost,127.0.0.1"
+        scope: RUN_TIME
+      - key: SECRET_KEY
+        value: "django-secure-production-secret-key-kaymama-2026"
+        scope: RUN_AND_BUILD_TIME
+    instance_size_slug: apps-s-1vcpu-0.5gb
+    instance_count: 1
+    http_port: 8000
+jobs:
+  - name: migrate
+    git:
+      repo_clone_url: https://github.com/Stan509/kaymama.git
+      branch: main
+    dockerfile_path: Dockerfile
+    run_command: "python manage.py migrate --noinput && python manage.py seed_restaurant && python manage.py collectstatic --noinput"
+    envs:
+      - key: DATABASE_URL
+        value: ${db.DATABASE_URL}
+        scope: RUN_AND_BUILD_TIME
+      - key: SECRET_KEY
+        value: "django-secure-production-secret-key-kaymama-2026"
+        scope: RUN_AND_BUILD_TIME
+    instance_size_slug: apps-s-1vcpu-0.5gb
+    instance_count: 1
+    kind: PRE_DEPLOY
+databases:
+  - name: db
+    engine: PG
+    version: "15"
+domains:
+  - domain: kaymama.online
+    type: PRIMARY
+  - domain: www.kaymama.online
+    type: ALIAS
