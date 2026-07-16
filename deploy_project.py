@@ -45,7 +45,7 @@ SPEC = {
                 },
                 {
                     "key": "ALLOWED_HOSTS",
-                    "value": "kaymama.online,www.kaymama.online,localhost,127.0.0.1",
+                    "value": "kaymama.online,www.kaymama.online,localhost,127.0.0.1,.ondigitalocean.app",
                     "scope": "RUN_TIME"
                 },
                 {

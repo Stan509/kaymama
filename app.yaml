@@ -14,7 +14,7 @@ services:
         value: "False"
         scope: RUN_TIME
       - key: ALLOWED_HOSTS
-        value: "kaymama.online,www.kaymama.online,localhost,127.0.0.1"
+        value: "kaymama.online,www.kaymama.online,localhost,127.0.0.1,.ondigitalocean.app"
         scope: RUN_TIME
       - key: SECRET_KEY
         value: "django-secure-production-secret-key-kaymama-2026"
