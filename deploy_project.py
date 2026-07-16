@@ -67,7 +67,7 @@ SPEC = {
                 "branch": "main"
             },
             "dockerfile_path": "Dockerfile",
-            "run_command": "python manage.py migrate --noinput && python manage.py seed_restaurant && python manage.py collectstatic --noinput",
+            "run_command": "bash deploy_tasks.sh",
             "envs": [
                 {
                     "key": "DATABASE_URL",
