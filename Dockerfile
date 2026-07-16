@@ -15,7 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app/
 
-# We'll run collectstatic on start or container execution
+RUN python manage.py collectstatic --noinput
+
 EXPOSE 8000
 
 CMD ["gunicorn", "kay_mama.wsgi:application", "--bind", "0.0.0.0:8000"]
