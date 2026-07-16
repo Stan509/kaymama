@@ -40,7 +40,7 @@ SPEC = {
                 },
                 {
                     "key": "DEBUG",
-                    "value": "False",
+                    "value": "True",
                     "scope": "RUN_TIME"
                 },
                 {
